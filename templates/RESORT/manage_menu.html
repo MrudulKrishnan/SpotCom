@@ -1,0 +1,88 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Menu</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+
+<div class="menu-container">
+    <h2>Manage Restaurant Menu</h2>
+
+    <!-- Form to add a new menu item -->
+    <form action="#" method="post" enctype="multipart/form-data" class="menu-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="foodName">Food Name</label>
+            <input type="text" id="foodName" name="FoodName" placeholder="Enter food name" required>
+        </div>
+        <div class="form-group">
+            <label for="foodType">Food Type</label>
+            <select id="foodType" name="Type" required>
+                <option value="">Select type</option>
+                <option value="Veg">Veg</option>
+                <option value="Non-Veg">Non-Veg</option>
+                <option value="Vegan">Vegan</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="Details" placeholder="Enter food description" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="Category" required>
+                <option value="">Select category</option>
+                <option value="Combo">Combo</option>
+                <option value="Main Course">Main Course</option>
+                <option value="Appetizer">Appetizer</option>
+                <option value="Dessert">Dessert</option>
+                <option value="Beverage">Beverage</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="image">Image</label>
+            <input type="file" id="image" name="Image" accept="image/*" required>
+        </div>
+        <button type="submit" class="submit-btn">Add Menu Item</button>
+    </form>
+
+    <hr>
+
+    <!-- Manage existing menu items -->
+    <h3>Current Menu</h3>
+    <table class="menu-table">
+        <thead>
+            <tr>
+                <th>Food Name</th>
+                <th>Food Type</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example menu entries -->
+             {% for menu in menus %}
+            <tr>
+                <td>{{ menu.FoodName }}</td>
+                <td>{{ menu.Type }}</td>
+                <td>{{ menu.Details }}</td>
+                <td>{{ menu.Category }}</td>
+                <td><img src="{{ menu.Image.url }}" alt="Grilled Sandwich" class="menu-image"></td>
+                <td>
+                    <button class="edit-btn"><a href="edit_resort_menu/{{ menu.id }}">Edit</a></button>
+                    <button class="delete-btn"><a href="delete_resort_menu/{{ menu.id }}">Delete</a></button>
+                </td>
+            </tr>
+            {% endfor %}
+            <!-- More menu items can be dynamically added here -->
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

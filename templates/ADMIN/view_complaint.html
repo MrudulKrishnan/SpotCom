@@ -1,0 +1,45 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Complaints and Send Reply</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+    <div class="table-container">
+        <h2>Complaints and Replies</h2>
+        <form method="post" action="/view_complaint">
+            {% csrf_token %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Complaint</th>
+                    <th>Date</th>
+                    <th>Reply</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            
+                {% for i in obj %}
+                <tr>
+                    <td>{{ i.USER.Name }}<br><img src={{ i.USER.Image.url }}/></td>
+                    <td>{{ i.Complaint }}</td>
+                    <td>{{ i.Date }}</td>
+                    <td>{{ i.Reply }}</td>
+                    <td>
+                        <textarea placeholder="Write your reply here" name="Reply"></textarea><br>
+                            <input type="hidden" name="id" value="{{ i.id }}">
+
+                        <button type="submit">Send Reply</a></button>
+                        
+                    </td>
+                </tr>
+                {% endfor %}
+            
+        </table>
+    </form>
+    </div>
+</body>
+</html>

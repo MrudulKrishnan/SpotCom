@@ -1,0 +1,49 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Gallery</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+
+<div class="gallery-container">
+    <h2>Restaurant Gallery</h2>
+
+    <!-- Add new image to the gallery -->
+    <form action="#" method="post" enctype="multipart/form-data" class="upload-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="imageUpload">Upload Image</label>
+            <input type="file" id="imageUpload" name="Image" accept="image/*" required>
+        </div>
+        <div class="form-group">
+            <label for="features">Features</label>
+            <input type="text" id="features" name="Features" placeholder="Enter image features" required>
+        </div>
+        <button type="submit" class="submit-btn">Add to Gallery</button>
+    </form>
+
+    <hr>
+
+    <!-- Manage existing images -->
+    <h3>Manage Gallery</h3>
+    <div class="gallery-grid">
+        <!-- Example gallery items -->
+         {%  for item in gallery %}
+
+        <div class="gallery-item">
+            <img src="{{ item.Image.url }}" alt="Gallery Image 1">
+            <p class="features-text">{{ item.Features }}</p>
+
+            <button class="delete-btn"><a href="resort_image_delete/{{ item.id }}" class="links">Delete</a></button>
+
+        </div>
+        {% endfor %}
+       
+    </div>
+</div>
+
+</body>
+</html>

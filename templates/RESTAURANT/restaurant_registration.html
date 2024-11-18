@@ -1,0 +1,62 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Registration</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Restaurant Registration</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="restaurantName">Restaurant Name</label>
+            <input type="text" id="restaurantName" name="RestaurantName" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Place</label>
+            <input type="text" id="address" name="Place" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="Phone" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="Email" required>
+        </div>
+        <div class="form-group">
+            <label for="type">Type</label>
+            <select id="type" name="Type" required>
+                <option value="">Select Type</option>
+                <option value="Dine-In">Dine-In</option>
+                <option value="Takeaway">Takeaway</option>
+                <option value="Delivery">Delivery</option>
+                <option value="Cafe">Cafe</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="image">Restaurant Image</label>
+            <input type="file" id="image" name="Image" accept="image/*" required>
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="address" name="Username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="text" id="address" name="Password" required>
+        </div>
+
+
+        <button type="submit" class="submit-btn">Register</button>
+    </form>
+</div>
+
+</body>
+</html>

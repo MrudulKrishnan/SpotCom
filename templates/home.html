@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+
+        /* Navbar styling */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            color: #fff;
+        }
+
+        /* Gallery links styling */
+        .card a {
+            position: absolute;
+            right: 15px;
+            bottom: 10px;
+            text-decoration: none;
+            color: #333;
+            background-color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        
+        .card a:hover {
+            background-color: #ddd;
+        }
+        
+        /* Reset global link styling */
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+        }
+
+        /* Header styling */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: #333;
+        }
+
+        /* Category sections */
+        .category {
+            margin-bottom: 40px;
+        }
+
+        .category h2 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        /* Grid container styling */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* Card styling */
+        .card {
+            position: relative;
+            background-color: #cfd1cf;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card-description {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">ExploreHub</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="restaurant_registration">Register Restaurant</a></li>
+            <li><a href="resort_registration">Register Resort</a></li>
+            <li><a href="login">Login</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Discover Our Restaurants and Resorts</h1>
+    </header>
+
+    <!-- Restaurants Section -->
+    <section class="category">
+        <h2>Restaurants</h2>
+        <div class="card-container">
+            <!-- Restaurant Card 1 -->
+             {%for i in restaurants %}
+            <div class="card">
+                <img src="{{ i.RESTAURANT.Image.url }}" alt="Restaurant Image 1">
+                <div class="card-content">
+                    <h3 class="card-title">{{ i.RESTAURANT.RestaurantName }}</h3>
+                    <h5>History</h5>
+                    <p class="card-description">{{ i.History }}</p><br>
+                    <h5>Features</h5>
+                    <p class="card-description">{{ i.Features }}</p>
+                    <a href="view_restaurant_gallery/{{ i.RESTAURANT.id}}" >View Gallery</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Resorts Section -->
+    <section class="category">
+        <h2>Resorts</h2>
+        <div class="card-container">
+            <!-- Resort Card 1 -->
+             {% for i in resorts %}
+            <div class="card">
+                <img src="{{ i.RESORT.Image.url }}" alt="Resort Image 1">
+                <div class="card-content">
+                    <h3 class="card-title">{{ i.RESORT.ResortName }}</h3>
+                    <h5>History</h5>
+                    <p class="card-description">{{ i.History }}</p><br>
+                    <h5>Features</h5>
+                    <p class="card-description">{{ i.Features }}</p>
+                    <a href="" >View Gallery</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+</body>
+</html>

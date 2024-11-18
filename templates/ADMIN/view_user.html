@@ -1,0 +1,41 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+    <div class="table-container">
+        <h2>User List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td><img src="{{ user.Image.url }}" alt="Error"></td>
+                    <td>{{ user.Name }}</td>
+                    <td>{{ user.Age }}</td>
+                    <td>{{ user.Gender }}</td>
+                    <td>{{ user.Address}}</td>
+                    <td>{{ user.Phone}}</td>
+                    <td>{{ user.Email}}</td>
+                </tr>
+                {% endfor %}
+                <!-- Add more user rows as needed -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

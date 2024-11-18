@@ -1,0 +1,75 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Offers</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+
+<div class="offers-container">
+    <h2>Manage Restaurant Offers</h2>
+
+    <!-- Form to add a new offer -->
+    <form action="#" method="post" class="offer-form"  enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="offerName">Offer Name</label>
+            <input type="text" id="offerName" name="OfferName" placeholder="Enter offer name" required>
+        </div>
+        <div class="form-group">
+            <label for="offerDetails">Offer Details</label>
+            <textarea id="offerDetails" name="Details" placeholder="Enter offer details" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="offerImage">Offer Image</label>
+            <input type="file" id="offerImage" name="Image" required>
+        </div>
+        <div class="form-group">
+            <label for="startDate">Starting Date</label>
+            <input type="date" id="startDate" name="StartingTime" required>
+        </div>
+        <div class="form-group">
+            <label for="endDate">Ending Date</label>
+            <input type="date" id="endDate" name="endingTime" required>
+        </div>
+        <button type="submit" class="submit-btn">Add Offer</button>
+    </form>
+
+    <hr>
+
+    <!-- Manage existing offers -->
+    <h3>Current Offers</h3>
+    <table class="offers-table">
+        <thead>
+            <tr>
+                <th>Offer Name</th>
+                <th>Offer Image</th>
+                <th>Details</th>
+                <th>Starting Date</th>
+                <th>Ending Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example offer entries -->
+             {% for offer in offers%}
+            <tr>
+                <td>{{ offer.OfferName }}</td>
+                <td><img src="{{ offer.Image.url }}" alt="error"></td>
+                <td>{{ offer.Details }}</td>
+                <td>{{ offer.StartingTime }}</td>
+                <td>{{ offer.endingTime }}</td>
+                <td>
+                    <button class="edit-btn"><a href="edit_offer/{{ offer.id }}">Edit</a></button><br><br>
+                    <button class="delete-btn"><a href="delete_offer/{{ offer.id }}">Delete</a></button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

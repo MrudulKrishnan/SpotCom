@@ -1,0 +1,46 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Resorts</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+    <div class="table-container">
+        <h2>Manage Amalgamation</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Place</th>
+                    <th>Phone No.</th>
+                    <th>Email</th>
+                    <th>More Images</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for amalgamation in amalgamations %}
+                <tr>
+                    <td><img src="{{ amalgamation.Image.url }}" alt="Resort Image"></td>
+                    <td>{{ amalgamation.Name }}</td>
+
+                    <td>{{ amalgamation.Place }}</td>
+
+                    <td>{{ amalgamation.Phone }}</td>
+
+                    <td>{{ amalgamation.Email }}</td>
+
+                    <td><a href="">View More Images</a></td>
+                    <td><a href="amalgamation_delete/{{ amalgamation.id }}">Delete</a></td>
+
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

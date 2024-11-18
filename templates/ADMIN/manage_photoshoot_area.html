@@ -1,0 +1,56 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Photoshoot Areas</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+    <div class="table-container">
+        <h2>Manage Photoshoot Areas</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Area Name</th>
+                    <th>Description</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Entry Time</th>
+                    <th>Exit Time</th>
+                    <th>Status</th>
+                    <th>More Images</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for photoshoot in photoshoot_obj %}
+                <tr>
+                    <td><img src="{{ photoshoot.Image.url }}" alt="" width="100"></td>
+                    <td>{{ photoshoot.SpotName }}</td>
+                    <td>{{ photoshoot.Description }}</td>
+
+                    <td>{{ photoshoot.Latitude }}</td>
+
+                    <td>{{ photoshoot.Longitude }}</td>
+
+                    <td>{{ photoshoot.EntryTime }}</td>
+
+                    <td>{{ photoshoot.ExitTime }}</td>
+
+                    <td>{{ photoshoot.Status }}</td>
+
+                    <td><a href="">View More Images</a></td>
+                    <td>
+                        <a href="photoshoot_delete/{{ photoshoot.id }}">Delete</a>
+                        <a href="photoshoot_map/{{ photoshoot.id }}">Locate</a><br>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

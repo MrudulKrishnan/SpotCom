@@ -1,0 +1,50 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Resorts</title>
+    <link rel="stylesheet" href="../static/styles/styles.css">
+</head>
+<body>
+    <div class="table-container">
+        <h2>Manage Resorts</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>OwnerName</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Phone No.</th>
+                    <th>Email</th>
+                    <th>More Images</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resort in resort_obj %}
+                <tr>
+                    <td><img src="{{ resort.Image.url }}" alt="Resort Image"></td>
+
+                    <td> {{ resort.OwnerName }} </td>
+
+                    <td> {{ resort.ResortName }} </td>
+
+                    <td>{{ resort.Address }}</td>
+
+                    <td>{{ resort.Phone }}</td>
+
+                    <td>{{ resort.Email }}</td>
+
+                    <td><a href="">View More Images</a></td>
+                    <td><a href="resort_delete/{{ resort.LOGIN.id }}">Delete</a></td>
+                </tr>
+                {% endfor %}
+
+                <!-- Add more resort rows as needed -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

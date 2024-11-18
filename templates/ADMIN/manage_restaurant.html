@@ -1,0 +1,47 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Restaurants</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+    <div class="table-container">
+        <h2>Manage Restaurants</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Restaurant Name</th>
+                    <th>Place</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for restaurant in rest_obj %}
+                <tr>
+                    <td><img src="{{ restaurant.Image.url}}" alt="Restaurant Image"></td>
+                    <td>{{ restaurant.RestaurantName }}</td>
+                    <td>{{ restaurant.Place }}</td>
+
+                    <td>{{ restaurant.Phone }}</td>
+
+                    <td>{{ restaurant.Email }}</td>
+
+                    <td>{{ restaurant.Type }}</td>
+                    <td>
+                        <a href="restaurant_delete/{{  restaurant.LOGIN.id }}">Delete</a>
+
+                    </td>
+                </tr>
+                {% endfor %}
+                <!-- Add more restaurant rows as needed -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

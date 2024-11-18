@@ -1,0 +1,47 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Parking Spots</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+    <div class="table-container">
+        <h2>Manage Parking Spots</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parking Area Name</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Status</th>
+                    <th>No. of Parking Slots</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for parking in parking_obj %}
+                <tr>
+                    <td>{{ parking.AreaName }}</td>
+
+                    <td>{{ parking.Latitude }}</td>
+
+                    <td>{{ parking.Longitude }}</td>
+
+                    <td>{{ parking.Status }}</td>
+
+                    <td>{{ parking.NoParking }}</td>
+
+                    <td>
+                        <a href="parking_delete/{{ parking.id }}">Delete</a><br>
+                        <a href="parking_map/{{ parking.id }}">Locate</a><br>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

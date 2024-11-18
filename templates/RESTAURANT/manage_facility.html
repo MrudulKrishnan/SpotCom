@@ -1,0 +1,70 @@
+{% load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Facilities</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+
+<div class="facilities-container">
+    <h2>Manage Restaurant Facilities</h2>
+
+    <!-- Form to add a new facility -->
+    <form action="#" method="post" class="facility-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="facilityName">Facility</label>
+            <input type="text" id="facilityName" name="Facility" placeholder="Enter facility name (e.g., Wi-Fi, Parking)" required>
+        </div>
+        <div class="form-group">
+            <label for="DetailsName">Details</label>
+            <input type="text" id="DetailsName" name="Details" placeholder="Enter Details" required>
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="Status" required>
+                <option value="Available">Available</option>
+                <option value="Unavailable">Unavailable</option>
+            </select>
+        </div>
+        <button type="submit" class="submit-btn">Add Facility</button>
+    </form>
+
+    <hr>
+
+    <!-- Manage existing facilities -->
+    <h3>Current Facilities</h3>
+    <table class="facilities-table">
+        <thead>
+            <tr>
+                <th>Facility</th>
+                <th>Details</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example facility entries -->
+             {%  for facility in facility %}
+            <tr>
+                <td>{{ facility.Facility }}</td>
+
+                <td>{{ facility.Details }}</td>
+
+                <td>{{ facility.Status }}</td>
+
+                <td>
+                    <button class="edit-btn"><a href="edit_facility/{{ facility.id }}">Edit</a></button>
+                    <button class="edit-btn"><a href="delete_facility/{{ facility.id }}">Delete</a></button>
+                    
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

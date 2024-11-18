@@ -1,0 +1,39 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Restaurant Reviews</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+</head>
+<body>
+
+<div class="review-container">
+    <h2>Restaurant Reviews</h2>
+    
+    <!-- Table to display reviews -->
+    <table class="review-table">
+        <thead>
+            <tr>
+                <th>User Name</th>
+                <th>Review</th>
+                <th>Rating</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rating in ratings %}
+            <tr>
+                <td>{{ rating.USER.Name }}</td>
+                <td>{{ rating.Feedback}}</td>
+                <td>{{ rating.Rating }}</td>
+                <td>{{ rating.Date }}</td>
+            </tr>
+            {% endfor %}
+        
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

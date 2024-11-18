@@ -1,0 +1,40 @@
+<!-- map.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Map View</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 500px; /* Set map height */
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h2>Location Map</h2>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Get latitude and longitude from Django context variables
+        const latitude = {{ latitude }};
+        const longitude = {{ longitude }};
+
+        // Initialize the map and set its view to the coordinates
+        const map = L.map('map').setView([latitude, longitude], 13);
+
+        // Load and display tile layer from OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add a marker at the specified coordinates
+        L.marker([latitude, longitude]).addTo(map)
+            .bindPopup('Location Coordinates: ' + latitude + ', ' + longitude)
+            .openPopup();
+    </script>
+</body>
+</html>

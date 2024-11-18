@@ -1,0 +1,28 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Welcome to the Admin Dashboard</h1>
+        
+        <div class="dashboard-links">
+            <a href="{% url 'view_user' %}">View Users</a>
+            <a href="{% url 'manage_restaurant' %}">Manage Restaurants</a>
+            <a href="{% url 'manage_resort' %}">Manage Resorts</a>
+            <a href="{% url 'manage_amalgamation' %}">Manage Amalgamations</a>
+            <a href="{% url 'manage_parkinspot' %}">Manage Parking Spots</a>
+            <a href="{% url 'manage_photoshoot_area' %}">Manage Photoshoot Areas</a>
+            <a href="{% url 'view_feedback' %}">View Feedback</a>
+            <a href="{% url 'view_complaint' %}">View Complaints</a>
+            <a href="{% url 'view_tourists' %}">View Tourists</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
