@@ -6,7 +6,7 @@ from SportComApp.views import *
 
 urlpatterns = [
     path('', HomePage.as_view(), name="home_page"),
-    path('login', LoginPage.as_view(), name="login_page"),
+    path('login', LoginPage.as_view(), name="login"),
     path('logout', Logout.as_view(), name="logout"),
     path('admin_dashboard', AdminDashboard.as_view(), name="admin_dashboard"),
 
@@ -68,5 +68,22 @@ urlpatterns = [
     path('edit_resort_menu/<int:menu_id>', EditResortMenu.as_view(), name="edit_resort_menu"),
     path('delete_resort_menu/<int:menu_id>', DeleteResortMenu.as_view(), name="delete_resort_menu"),
     path('view_resort_review', ViewResortReview.as_view(), name="view_resort_review"),
+
+
+    # //////////////////////////////////////// USER API //////////////////////////////////////////////////////
+
+    path('login_api', LoginPageApi.as_view(), name="login_api"),
+    path('view_restaurants_api', ViewRestaurants.as_view(), name="view_restaurants_api"),
+    path('RestaurantDetails', RestaurantDetails.as_view(), name="RestaurantDetails"),
+    path('ViewFestivals', ViewFestivals.as_view(), name="ViewFestivals"),
+    path('ViewResort', ViewResort.as_view(), name="ViewResort"),
+    path('ViewPhotoShoot', ViewPhotoShoot.as_view(), name="ViewPhotoShoot"),
+    path('ViewAmalgamation', ViewAmalgamation.as_view(), name="ViewAmalgamation"),
+    path('ViewParkingSpot', ViewParkingSpot.as_view(), name="ViewParkingSpot"),
+    path('ViewPoint', ViewPoint.as_view(), name="ViewPoint"),
+    path('ViewParkingSpot', ViewParkingSpot.as_view(), name="ViewParkingSpot"),
+    path('SendComplaint', SendComplaint.as_view(), name="SendComplaint"),
+    path('ViewFestivals', ViewFestivals.as_view(), name="ViewFestivals"),
+
 
 ]

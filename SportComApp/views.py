@@ -523,35 +523,29 @@ class UserReg(APIView):
         return Response({'login_error': login_serial.errors if not login_valid else None,
                          'user_error': user_serial.errors if not data_valid else None}, status=status.HTTP_400_BAD_REQUEST)
 
-class LoginPage(APIView):
+class LoginPageApi(APIView):
     def post(self, request):
-        response_dict= []
+        response_dict= {}
         password = request.data.get("password")
         print("Password ------------------> ",password)
         username = request.data.get("username")
         print("Username ------------------> ",username)
         try:
-            t_user = LoginTable.objects.filter(username=username, password=password).first()
-            print("user_obj :-----------", t_user)
+            user = LoginTable.objects.filter(username=username, password=password).first()
+            print("user_obj :-----------", user)
         except LoginTable.DoesNotExist:
             response_dict["reason"] = "No account found for this username. Please signup."
             return Response(response_dict, HTTP_200_OK)
-        authenticated = authenticate(username=t_user.username, password=password)
-        if not authenticated:
-            response_dict["reason"] = "Invalid credentials."
-            return Response(response_dict, HTTP_200_OK)
-        user = t_user
-        print(t_user.user_type)
+        print(user.user_type)
         if user.user_type == "USER":
-            login(request, user, "django.contrib.auth.backends.ModelBackend")
-            response_dict["session_data"] = {
+            response_dict = {
                 "login_id": user.id,
                 "user_type": user.user_type,
                 "username": user.username,
             }
+            print("User details :--------------> ",response_dict)
             return Response(response_dict, HTTP_200_OK)
         elif user.user_type == "TOURIST":
-            login(request, user, "django.contrib.auth.backends.ModelBackend")
             response_dict["session_data"] = {
                 "login_id": user.id,
                 "user_type": user.user_type,
