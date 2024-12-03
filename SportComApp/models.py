@@ -336,6 +336,7 @@ class FestivalTable(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)  
           
+
 class ViewPointTable(models.Model):
     TOURIST = models.ForeignKey(TouristTable, on_delete=models.CASCADE)
     ViewPoint = models.CharField(max_length=100, blank=True, null=True)   
@@ -347,3 +348,51 @@ class ViewPointTable(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)   
           
+class ViewPointGalleryTable(models.Model):
+    POINT = models.ForeignKey(ViewPointTable, on_delete=models.CASCADE)
+    Image = models.FileField(null=True, blank=True)
+    
+class FestivalGalleryTable(models.Model):
+    FESTIVAL = models.ForeignKey(FestivalTable, on_delete=models.CASCADE)
+    Image = models.FileField(null=True, blank=True)
+
+class AmalgamationGalleryTable(models.Model):
+    AMALGAMATION = models.ForeignKey(AmalgamationTable, on_delete=models.CASCADE)
+    Image = models.FileField(null=True, blank=True)
+
+class PhotoShootGalleryTable(models.Model):
+    SHOOT = models.ForeignKey(PhotoShootTable, on_delete=models.CASCADE)
+    Image = models.FileField(null=True, blank=True)
+
+class FestivalRatingTable(models.Model):
+    USER = models.ForeignKey(UserTable, on_delete=models.CASCADE) 
+    FESTIVAL = models.ForeignKey(FestivalTable, on_delete=models.CASCADE) 
+    Feedback = models.CharField(max_length=300, blank=True, null=True)   
+    Date = models.DateTimeField(auto_now_add=True)    
+    Rating = models.FloatField(null=True, blank=True)  
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now_add=True, null=True, blank=True) 
+
+
+class ParkingRatingReviewTable(models.Model):
+    USER = models.ForeignKey(UserTable, on_delete=models.CASCADE)
+    PARKING = models.ForeignKey(ParkingSpotTable, on_delete=models.CASCADE)
+    Rating = models.FloatField(null=True, blank=True)
+    Review = models.CharField(max_length=300, null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+class ViewPointRatingReviewTable(models.Model):
+    USER = models.ForeignKey(UserTable, on_delete=models.CASCADE)
+    POINT = models.ForeignKey(ViewPointTable, on_delete=models.CASCADE)
+    Rating = models.FloatField(null=True, blank=True)
+    Review = models.CharField(max_length=300, null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+class AmalgamationRatingReviewTable(models.Model):
+    USER = models.ForeignKey(UserTable, on_delete=models.CASCADE)
+    AMALGAMATION = models.ForeignKey(AmalgamationTable, on_delete=models.CASCADE)
+    Rating = models.FloatField(null=True, blank=True)
+    Review = models.CharField(max_length=300, null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+

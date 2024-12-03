@@ -72,8 +72,10 @@ urlpatterns = [
 
     # //////////////////////////////////////// USER API //////////////////////////////////////////////////////
 
+    path('UserReg', UserReg.as_view(), name="UserReg"),
     path('login_api', LoginPageApi.as_view(), name="login_api"),
-    path('view_restaurants_api', ViewRestaurants.as_view(), name="view_restaurants_api"),
+    path('ViewOffersApi', ViewOffers.as_view(), name="ViewOffersApi"),
+    path('ViewRestaurants', ViewRestaurants.as_view(), name="ViewRestaurants"),
     path('RestaurantDetails', RestaurantDetails.as_view(), name="RestaurantDetails"),
     path('ViewFestivals', ViewFestivals.as_view(), name="ViewFestivals"),
     path('ViewResort', ViewResort.as_view(), name="ViewResort"),
@@ -83,7 +85,20 @@ urlpatterns = [
     path('ViewPoint', ViewPoint.as_view(), name="ViewPoint"),
     path('ViewParkingSpot', ViewParkingSpot.as_view(), name="ViewParkingSpot"),
     path('SendComplaint', SendComplaint.as_view(), name="SendComplaint"),
-    path('ViewFestivals', ViewFestivals.as_view(), name="ViewFestivals"),
+    path('ViewFestivalRating/<int:fest_id>', ViewFestivalRating.as_view(), name="ViewFestivalRating"),
+    path('ViewResortRating/<int:resort_id>', ViewResortRating.as_view(), name="ViewResortRating"),
+    path('ViewRestaurantRating/<int:restaurant_id>', ViewRestaurantRating.as_view(), name="ViewRestaurantRating"),
+    path('ViewViewpointRating/<int:point_id>', ViewViewpointRating.as_view(), name="ViewViewpointRating"),
+    path('SendFestivalReviews', SendFestivalReviews.as_view(), name="SendFestivalReviews"),
+    path('SendResortReviews', SendResortReviews.as_view(), name="SendResortReviews"),
+    path('SendRestaurantReviews', SendRestaurantReviews.as_view(), name="SendRestaurantReviews"),
+    path('SendViewpointReviews', SendViewpointReviews.as_view(), name="SendViewpointReviews"),
 
+    # //////////////////////////////////////// TOURIST API //////////////////////////////////////////////////////
 
+    path('TouristReg', TouristReg.as_view(), name="TouristReg"),
+    path('ManageParking', ManageParking.as_view(), name="ManageParking"),
+    path('ManageFestival', ManageFestival.as_view(), name="ManageFestival"),
+    path('ManageViewPoint', ManageViewPoint.as_view(), name="ManageViewPoint"),
+    path('ManageAmalgamation', ManageAmalgamation.as_view(), name="ManageAmalgamation"),
 ]

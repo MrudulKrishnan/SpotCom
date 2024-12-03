@@ -516,12 +516,14 @@ class UserReg(APIView):
         login_valid = login_serial.is_valid()
 
         if data_valid and login_valid:
+            print("&&&&&&&&&&&&&&&&&")
             password = request.data['password']
             login_profile = login_serial.save(user_type='USER', password=password)
             user_serial.save(LOGIN=login_profile)
             return Response(user_serial.data, status=status.HTTP_201_CREATED)
         return Response({'login_error': login_serial.errors if not login_valid else None,
                          'user_error': user_serial.errors if not data_valid else None}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LoginPageApi(APIView):
     def post(self, request):
@@ -534,14 +536,15 @@ class LoginPageApi(APIView):
             user = LoginTable.objects.filter(username=username, password=password).first()
             print("user_obj :-----------", user)
         except LoginTable.DoesNotExist:
-            response_dict["reason"] = "No account found for this username. Please signup."
+            response_dict["message"] = "No account found for this username. Please signup."
             return Response(response_dict, HTTP_200_OK)
         print(user.user_type)
         if user.user_type == "USER":
             response_dict = {
-                "login_id": user.id,
+                "login_id": str(user.id),
                 "user_type": user.user_type,
-                "username": user.username,
+                "status": "success",
+
             }
             print("User details :--------------> ",response_dict)
             return Response(response_dict, HTTP_200_OK)
@@ -549,24 +552,95 @@ class LoginPageApi(APIView):
             response_dict["session_data"] = {
                 "login_id": user.id,
                 "user_type": user.user_type,
-                "username": user.username,
+                "status": "success"
             }
             return Response(response_dict, HTTP_200_OK)
         else:
-            response_dict["reason"] = "Your account has not been approved yet or you are a CLIENT user."
+            response_dict["message "] = "Your account has not been approved yet or you are a CLIENT user."
             return Response(response_dict, HTTP_200_OK)
+
+class ViewOffers(APIView):
+    def get(self, request):
+        restaurant = RestaurantTable.objects.all()
+        restaurant_serializer = RestaurantOfferSerializer(restaurant, many = True)
+        print("----------------> Offer images", restaurant_serializer)
+        return Response(restaurant_serializer.data)
+
 
 class ViewRestaurants(APIView):
     def get(self, request):
-        restaurant = RestaurantTable.objects.all()
-        restaurant_serializer = RestaurantSeralizer(restaurant, many = True)
-        return Response(restaurant_serializer.data)
+        # Retrieve data from each relevant table
+        restaurants = RestaurantTable.objects.all()
+        descriptions = RestaurantDescriptionTable.objects.all()
+        galleries = RestaurantGalleryTable.objects.all()
+        facilities = RestaurantFacilityTable.objects.all()
+        menus = RestaurantMenuTable.objects.all()
+        offers = RestaurantOfferTable.objects.all()
+        ratings = RestaurantRatingTable.objects.all()
+
+        # Serialize data from each table
+        restaurant_serializer = RestaurantSeralizer(restaurants, many=True)
+        description_serializer = RestaurantDescriptionSeralizer(descriptions, many=True)
+        gallery_serializer = RestaurantGallerySeralizer(galleries, many=True)
+        facility_serializer = RestaurantFacilitySeralizer(facilities, many=True)
+        menu_serializer = RestaurantMenuSeralizer(menus, many=True)
+        offer_serializer = RestaurantOfferSerializer(offers, many=True)
+        rating_serializer = RestaurantRatingSerializer(ratings, many=True)
+
+        # Combine serialized data into a response structure
+        response_data = []
+        for restaurant in restaurant_serializer.data:
+            print("&&&&&&&&&&&&&&&&&&&&&&&&", restaurant)
+            restaurant_id = restaurant['id']  # Assuming 'id' is a field in your Restaurant table
+
+            # Safely filter other data based on the restaurant id
+            restaurant_description = [
+                desc for desc in description_serializer.data
+                if desc.get('restaurant_id') == restaurant_id
+            ]
+            restaurant_gallery = [
+                gallery for gallery in gallery_serializer.data
+                if gallery.get('restaurant_id') == restaurant_id
+            ]
+            restaurant_facility = [
+                facility for facility in facility_serializer.data
+                if facility.get('restaurant_id') == restaurant_id
+            ]
+            restaurant_menu = [
+                menu for menu in menu_serializer.data
+                if menu.get('restaurant_id') == restaurant_id
+            ]
+            restaurant_offer = [
+                offer for offer in offer_serializer.data
+                if offer.get('restaurant_id') == restaurant_id
+            ]
+            restaurant_rating = [
+                rating for rating in rating_serializer.data
+                if rating.get('restaurant_id') == restaurant_id
+            ]
+
+            # Add the combined data to the response for this restaurant
+            restaurant_data = restaurant
+            restaurant_data['description'] = restaurant_description
+            restaurant_data['gallery'] = restaurant_gallery
+            restaurant_data['facility'] = restaurant_facility
+            restaurant_data['menu'] = restaurant_menu
+            restaurant_data['offer'] = restaurant_offer
+            restaurant_data['rating'] = restaurant_rating
+
+            # Append the combined restaurant data to the response list
+            response_data.append(restaurant_data)
+            print("%%%%%%%%%%%%%%%%%%", response_data)
+
+        return Response(response_data)
+    
     def post(self, request):
+        # Handle POST request for restaurant ratings
         restaurant_rating_serializer = RestaurantRatingSerializer(data=request.data)
         if restaurant_rating_serializer.is_valid():
             restaurant_rating_serializer.save()
             return Response(restaurant_rating_serializer.data, status=status.HTTP_201_CREATED)
-
+        
 class RestaurantDetails(APIView):
     def get(self, request):
         restaurant_id = request.data['restaurant_id']
@@ -582,39 +656,192 @@ class RestaurantDetails(APIView):
 
 class ViewResort(APIView):
     def get(self, request):
-        resort = ResortTable.objects.all()
-        resort_serializer = ResortSeralizer(resort, many = True)
-        return Response(resort_serializer.data)
-             
+        # Retrieve data from each relevant table
+        restaurants = ResortTable.objects.all()
+        descriptions = ResortDescriptionTable.objects.all()
+        galleries = ResortGalleryTable.objects.all()
+        facilities = ResortFacilityTable.objects.all()
+        menus = ResortMenuTable.objects.all()
+        offers = ResortOfferTable.objects.all()
+        ratings = ResortRatingTable.objects.all()
+
+        # Serialize data from each table
+        resort_serializer = ResortSeralizer(restaurants, many=True)
+        description_serializer = ResortDescriptionSeralizer(descriptions, many=True)
+        gallery_serializer = ResortGallerySeralizer(galleries, many=True)
+        facility_serializer = ResortFacilitySeralizer(facilities, many=True)
+        menu_serializer = ResortMenuSeralizer(menus, many=True)
+        offer_serializer = ResortOfferSerializer(offers, many=True)
+        rating_serializer = ResortRatingSerializer(ratings, many=True)
+
+        # Combine serialized data into a response structure
+        response_data = []
+        for resort in resort_serializer.data:
+            resort_id = resort['id']  # Assuming 'id' is a field in your Restaurant table
+
+            # Safely filter other data based on the restaurant id
+            resort_description = [
+                desc for desc in description_serializer.data
+                if desc.get('resort_id') == resort_id
+            ]
+            resort_gallery = [
+                gallery for gallery in gallery_serializer.data
+                if gallery.get('resort_id') == resort_id
+            ]
+            resort_facility = [
+                facility for facility in facility_serializer.data
+                if facility.get('resort_id') == resort_id
+            ]
+            resort_menu = [
+                menu for menu in menu_serializer.data
+                if menu.get('resort_id') == resort_id
+            ]
+            resort_offer = [
+                offer for offer in offer_serializer.data
+                if offer.get('resort_id') == resort_id
+            ]
+            resort_rating = [
+                rating for rating in rating_serializer.data
+                if rating.get('resort_id') == resort_id
+            ]
+
+            # Add the combined data to the response for this restaurant
+            resort_data = resort
+            resort_data['description'] = resort_description
+            resort_data['gallery'] = resort_gallery
+            resort_data['facility'] = resort_facility
+            resort_data['menu'] = resort_menu
+            resort_data['offer'] = resort_offer
+            resort_data['rating'] = resort_rating
+
+            # Append the combined restaurant data to the response list
+            response_data.append(resort_data)
+            print("%%%%%%%%%%%%%%%%%%", response_data)
+        return Response(response_data)
+
 class ViewPhotoShoot(APIView):
     def get(self, request):
         photo_shoot = PhotoShootTable.objects.all()
-        photo_shoot_serializer = PhotoShootSeralizer(photo_shoot, many = True)
-        return Response(photo_shoot_serializer.data)
+        galleries = PhotoShootGalleryTable.objects.all()
+        # Serialize data from each table
+        photo_shoot_serializer = PhotoShootSeralizer(photo_shoot, many=True)
+        gallery_serializer = PhotShootGallerySeralizer(galleries, many=True)
+        # Combine serialized data into a response structure
+        response_data = []
+        for shoot in photo_shoot_serializer.data:
+            shoot_id = shoot['id'] 
+            # Safely filter other data based on the restaurant id
+            shoot_gallery = [
+                gallery for gallery in gallery_serializer.data
+                if gallery.get('festival_id') == shoot_id
+            ]
+            # Add the combined data to the response for this restaurant
+            shoot_data = shoot
+            shoot_data['gallery'] = shoot_gallery
+            # Append the combined restaurant data to the response list
+            response_data.append(shoot_data)
+            print("%%%%%%%%%%%%%%%%%%", response_data)
+        return Response(response_data)
+             
              
 class ViewAmalgamation(APIView):
     def get(self, request):
-        amalgamation = AmalgamationTable.objects.all()
-        amalgamation_serializer = AmalgamationSeralizer(amalgamation, many = True)
-        return Response(amalgamation_serializer.data)
+        festivals = AmalgamationTable.objects.all()
+        galleries = AmalgamationGalleryTable.objects.all()
+        review = AmalgamationRatingReviewTable.objects.all()
+        # Serialize data from each table
+        festivals_serializer = FestivalSeralizer(festivals, many=True)
+        gallery_serializer = FestivalGallerySeralizer(galleries, many=True)
+        gallery_serializer = FestivalGallerySeralizer(galleries, many=True)
+        # Combine serialized data into a response structure
+        response_data = []
+        for festival in festivals_serializer.data:
+            festival_id = festival['id'] 
+
+            # Safely filter other data based on the restaurant id
+            festival_gallery = [
+                gallery for gallery in gallery_serializer.data
+                if gallery.get('festival_id') == festival_id
+            ]
+            # Add the combined data to the response for this restaurant
+            festival_data = festival
+            festival_data['gallery'] = festival_gallery
+
+            # Append the combined restaurant data to the response list
+            response_data.append(festival_data)
+            print("%%%%%%%%%%%%%%%%%%", response_data)
+
+        return Response(response_data)
              
 class ViewParkingSpot(APIView):
     def get(self, request):
         parking_sopt = ParkingSpotTable.objects.all()
         parking_serializer = ParkingSpotSeralizer(parking_sopt, many = True)
+        print("----------------> Parking", parking_serializer)
         return Response(parking_serializer.data)
              
 class ViewPoint(APIView):
     def get(self, request):
         view_point = ViewPointTable.objects.all()
-        view_point_serializer = ViewPointSeralizer(view_point, many = True)
-        return Response(view_point_serializer.data)
+        galleries = ViewPointGalleryTable.objects.all()
+        review = ViewPointRatingReviewTable.objects.all()
+
+        # Serialize data from each table
+        view_point_serializer = ViewPointSeralizer(view_point, many=True)
+        gallery_serializer = ViewPointGallerySeralizer(galleries, many=True)
+        review_serializer = ViewPointRatingSeralizer(review, many=True)
+        # Combine serialized data into a response structure
+        response_data = []
+        for view_point in view_point_serializer.data:
+            view_point_id = view_point['id'] 
+
+            # Safely filter other data based on the restaurant id
+            festival_gallery = [
+                gallery for gallery in gallery_serializer.data
+                if gallery.get('view_point_id') == view_point_id
+            ]
+
+            point_review = [
+                review for review in review_serializer.data
+                if review.get('point_id') == view_point_id
+            ]
+            # Add the combined data to the response for this restaurant
+            view_point_data = view_point
+            view_point_data['gallery'] = festival_gallery
+            view_point_data['review'] = point_review
+
+            # Append the combined restaurant data to the response list
+            response_data.append(view_point_data)
+            print("%%%%%%%%%%%%%%%%%%", response_data)
+        return Response(response_data)
              
 class ViewFestivals(APIView):
     def get(self, request):
         festivals = FestivalTable.objects.all()
-        festival_serializer = FestivalSeralizer(festivals, many = True)
-        return Response(festival_serializer.data)
+        galleries = FestivalGalleryTable.objects.all()
+        # Serialize data from each table
+        festivals_serializer = FestivalSeralizer(festivals, many=True)
+        gallery_serializer = FestivalGallerySeralizer(galleries, many=True)
+        # Combine serialized data into a response structure
+        response_data = []
+        for festival in festivals_serializer.data:
+            festival_id = festival['id'] 
+
+            # Safely filter other data based on the restaurant id
+            festival_gallery = [
+                gallery for gallery in gallery_serializer.data
+                if gallery.get('festival_id') == festival_id
+            ]
+            # Add the combined data to the response for this restaurant
+            festival_data = festival
+            festival_data['gallery'] = festival_gallery
+
+            # Append the combined restaurant data to the response list
+            response_data.append(festival_data)
+            print("%%%%%%%%%%%%%%%%%%", response_data)
+
+        return Response(response_data)
+    
              
 class SendComplaint(APIView):
     def get(self, request):
@@ -626,6 +853,104 @@ class SendComplaint(APIView):
         if comp_serializer.is_valid():
                 comp_serializer.save(reply="pending")
                 return Response(comp_serializer.data, status=status.HTTP_201_CREATED)
+        
+class ViewFestivalRating(APIView):
+    def get(self, request, fest_id):
+        print("****************", fest_id)
+        obj = FestivalRatingTable.objects.filter(FESTIVAL_id=fest_id)
+        festival_serializer = FestivalRatingSeralizer(obj, many = True)
+        return Response(festival_serializer.data)
+
+class ViewResortRating(APIView):
+    def get(self, request, resort_id):
+        print("****************", resort_id)
+        obj = ResortRatingTable.objects.filter(RESORT_id=resort_id)
+        review_serializer = ResortReviewSerializer(obj, many = True)
+        return Response(review_serializer.data)
+
+class ViewRestaurantRating(APIView):
+    def get(self, request, restaurant_id):
+        print("****************", restaurant_id)
+        obj = RestaurantRatingTable.objects.filter(RESTAURANT_id=restaurant_id)
+        review_serializer = RestaurantReviewSerializer(obj, many = True)
+        return Response(review_serializer.data)
+
+class ViewViewpointRating(APIView):
+    def get(self, request, point_id):
+        print("****************", point_id)
+        obj = ViewPointRatingReviewTable.objects.filter(POINT_id=point_id)
+        review_serializer = ViewPointRatingSeralizer(obj, many = True)
+        return Response(review_serializer.data)
+
+class SendViewpointReviews(APIView):
+    def post(self, request):
+        user_id = request.data.get('user_id')
+        event_id = request.data.get('event_id')
+        rating = request.data.get('rating')
+        review = request.data.get('review')
+        print("##############", request.data)
+        rating_obj = ViewPointRatingReviewTable()
+        rating_obj.USER=UserTable.objects.get(LOGIN_id=user_id)
+        rating_obj.POINT = ViewPointTable.objects.get(id=event_id)
+        rating_obj.Review = review
+        rating_obj.Rating = rating
+        rating_obj.save()
+        obj = ViewPointRatingReviewTable.objects.filter(POINT_id=event_id)
+        serializer = ViewPointRatingSeralizer(obj, many = True)
+        return Response(serializer.data)
+
+class SendResortReviews(APIView):
+    def post(self, request):
+        user_id = request.data.get('user_id')
+        event_id = request.data.get('event_id')
+        rating = request.data.get('rating')
+        review = request.data.get('review')
+        print("##############", request.data)
+        rating_obj = ResortRatingTable()
+        rating_obj.USER=UserTable.objects.get(LOGIN_id=user_id)
+        rating_obj.RESORT = ResortTable.objects.get(id=event_id)
+        rating_obj.Feedback = review
+        rating_obj.Rating = rating
+        rating_obj.save()
+        obj = ResortRatingTable.objects.filter(RESORT_id=event_id)
+        festival_serializer = ResortReviewSerializer(obj, many = True)
+        return Response(festival_serializer.data)
+
+class SendRestaurantReviews(APIView):
+    def post(self, request):
+        user_id = request.data.get('user_id')
+        event_id = request.data.get('event_id')
+        rating = request.data.get('rating')
+        review = request.data.get('review')
+        print("##############", request.data)
+        rating_obj = RestaurantRatingTable()
+        rating_obj.USER=UserTable.objects.get(LOGIN_id=user_id)
+        rating_obj.RESTAURANT = RestaurantTable.objects.get(id=event_id)
+        rating_obj.Feedback = review
+        rating_obj.Rating = rating
+        rating_obj.save()
+        obj = RestaurantRatingTable.objects.filter(RESTAURANT_id=event_id)
+        festival_serializer = RestaurantReviewSerializer(obj, many = True)
+        return Response(festival_serializer.data)
+
+
+class SendFestivalReviews(APIView):
+    def post(self, request):
+        user_id = request.data.get('user_id')
+        event_id = request.data.get('event_id')
+        rating = request.data.get('rating')
+        review = request.data.get('review')
+        print("##############", request.data)
+        rating_obj = FestivalRatingTable()
+        rating_obj.USER=UserTable.objects.get(LOGIN_id=user_id)
+        rating_obj.FESTIVAL = FestivalTable.objects.get(id=event_id)
+        rating_obj.Feedback = review
+        rating_obj.Rating = rating
+        rating_obj.save()
+        obj = FestivalRatingTable.objects.filter(FESTIVAL_id=event_id)
+        festival_serializer = FestivalRatingSeralizer(obj, many = True)
+        return Response(festival_serializer.data)
+
 
 # ////////////////////////////////// TOURIST ///////////////////////////////////////////
 
